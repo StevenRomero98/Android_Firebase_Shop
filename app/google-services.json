@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "764443883089",
+    "firebase_url": "https://dimdamlalwaniromeroapp.firebaseio.com",
+    "project_id": "dimdamlalwaniromeroapp",
+    "storage_bucket": "dimdamlalwaniromeroapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764443883089:android:c9f540ac8d41511d",
+        "android_client_info": {
+          "package_name": "com.example.nutz.dimdamlalwaniromero_midtermexam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764443883089-2ue18loees2p6n9aq2bjh8mdrgltc0m8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaaNZ5VM0Z3GwXsy3fzyvIQVwOoN-mCsQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
