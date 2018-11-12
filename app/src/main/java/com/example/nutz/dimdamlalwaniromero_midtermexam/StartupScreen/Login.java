@@ -1,4 +1,4 @@
-package com.example.nutz.dimdamlalwaniromero_midtermexam.AccountActivity;
+package com.example.nutz.dimdamlalwaniromero_midtermexam.StartupScreen;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AddData;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.WelcomeScreen;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.Shop;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.WelcomeScreen;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

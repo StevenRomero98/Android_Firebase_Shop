@@ -11,23 +11,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Material.Light.NoActionBar.FullScreen">
-        <activity android:name=".SplashScreen">
+        <activity android:name=".StartupScreen.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity.Signup" />
-        <activity android:name=".AccountActivity.Login" />
-        <activity android:name=".Shop" />
+        <activity android:name=".StartupScreen.Signup" />
+        <activity android:name=".StartupScreen.Login" />
+        <activity android:name=".Shop.Shop" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".WelcomeScreen" />
-        <activity android:name=".Cart" />
+        <activity android:name=".Shop.WelcomeScreen" />
+        <activity android:name=".Shop.Cart" />
         <activity android:name=".Products.P1" />
         <activity android:name=".Products.P2" />
         <activity android:name=".Products.P3" />

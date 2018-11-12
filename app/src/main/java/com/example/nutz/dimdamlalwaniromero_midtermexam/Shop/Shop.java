@@ -1,4 +1,4 @@
-package com.example.nutz.dimdamlalwaniromero_midtermexam;
+package com.example.nutz.dimdamlalwaniromero_midtermexam.Shop;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.example.nutz.dimdamlalwaniromero_midtermexam.AccountActivity.Signup;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.StartupScreen.Signup;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P1;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P2;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P3;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P4;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P5;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P6;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,7 +27,7 @@ public class Shop extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_data);
+        setContentView(R.layout.activity_shop);
 
         p1 = findViewById(R.id.p1);
         p2 = findViewById(R.id.p2);

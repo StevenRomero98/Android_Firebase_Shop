@@ -3,14 +3,13 @@ package com.example.nutz.dimdamlalwaniromero_midtermexam.Products;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Cart;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.Cart;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 
 public class P1 extends AppCompatActivity {
