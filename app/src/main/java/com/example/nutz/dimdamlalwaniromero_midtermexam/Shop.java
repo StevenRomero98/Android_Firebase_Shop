@@ -15,7 +15,6 @@ import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P5;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P6;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
 
 public class Shop extends AppCompatActivity {
 
@@ -23,12 +22,11 @@ public class Shop extends AppCompatActivity {
 
     FirebaseAuth auth;
     FirebaseUser user;
-    FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop);
+        setContentView(R.layout.activity_add_data);
 
         p1 = findViewById(R.id.p1);
         p2 = findViewById(R.id.p2);
@@ -37,7 +35,6 @@ public class Shop extends AppCompatActivity {
         p5 = findViewById(R.id.p5);
         p6 = findViewById(R.id.p6);
 
-        storage = FirebaseStorage.getInstance();
     }
 
     public void Cart(View v){

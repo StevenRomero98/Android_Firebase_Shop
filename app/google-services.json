@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "764443883089-q9v8ms5pk9arsktn80ouk81ov69qqomv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nutz.dimdamlalwaniromero_midtermexam",
+            "certificate_hash": "629c448a62fbce3a2152acf2c864d0d55c76ce9f"
+          }
+        },
+        {
           "client_id": "764443883089-2ue18loees2p6n9aq2bjh8mdrgltc0m8.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764443883089-2ue18loees2p6n9aq2bjh8mdrgltc0m8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

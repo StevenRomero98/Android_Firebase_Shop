@@ -26,17 +26,15 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".WelcomeScreen"/>
-        <activity android:name=".Cart"/>
-        <activity android:name=".Shop"/>
-        <activity android:name=".Products.P1"/>
-        <activity android:name=".Products.P2"/>
-        <activity android:name=".Products.P3"/>
-        <activity android:name=".Products.P4"/>
-        <activity android:name=".Products.P5"/>
+        <activity android:name=".WelcomeScreen" />
+        <activity android:name=".Cart" />
+        <activity android:name=".Products.P1" />
+        <activity android:name=".Products.P2" />
+        <activity android:name=".Products.P3" />
+        <activity android:name=".Products.P4" />
+        <activity android:name=".Products.P5" />
         <activity android:name=".Products.P6" />
-
-        <activity android:name=".Cart"/>
+        <activity android:name=".Admin.AddData"></activity>
     </application>
 
 </manifest>

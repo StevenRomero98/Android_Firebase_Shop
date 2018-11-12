@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AddData;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.WelcomeScreen;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     Button btnSignup, btnLogin;
+    Button adminmode, quicksignin, usermode;
     EditText inputEmail, inputPass;
 
     FirebaseAuth auth;
@@ -37,19 +39,28 @@ public class Login extends AppCompatActivity {
         btnSignup = findViewById(R.id.btnSignup);
         btnLogin  = findViewById(R.id.btnLogin);
 
+        adminmode = findViewById(R.id.adminmode);
+        quicksignin = findViewById(R.id.quicksignin);
+        usermode= findViewById(R.id.usermode);
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 }
 
 
     public void Register(View v) {
-        Intent intent = new Intent(this, Signup.class);
-        startActivity(intent);
+        Intent i = new Intent(this, Signup.class);
+        startActivity(i);
     }
 
     public void QuickSignIn(View v) {
-        Intent intent = new Intent(this, Shop.class);
-        startActivity(intent);
+        Intent i = new Intent(this, Shop.class);
+        startActivity(i);
+    }
+
+    public void AdminMode(View v) {
+        Intent i = new Intent(this, AddData.class);
+        startActivity(i);
     }
 
     public void SignIn(View v){
@@ -75,6 +86,8 @@ public class Login extends AppCompatActivity {
         }
 
     }
+
+
 
 
 }
