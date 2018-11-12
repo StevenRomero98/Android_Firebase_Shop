@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AddData;
@@ -24,6 +25,7 @@ public class Login extends AppCompatActivity {
     Button btnSignup, btnLogin;
     Button adminmode, quicksignin, usermode;
     EditText inputEmail, inputPass;
+    ProgressBar proglog;
 
     FirebaseAuth auth;
     FirebaseUser user;
@@ -39,9 +41,7 @@ public class Login extends AppCompatActivity {
         btnSignup = findViewById(R.id.btnSignup);
         btnLogin  = findViewById(R.id.btnLogin);
 
-        adminmode = findViewById(R.id.adminmode);
-        quicksignin = findViewById(R.id.quicksignin);
-        usermode= findViewById(R.id.usermode);
+        proglog = findViewById(R.id.proglog);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -58,16 +58,13 @@ public class Login extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void AdminMode(View v) {
-        Intent i = new Intent(this, AddData.class);
-        startActivity(i);
-    }
-
     public void SignIn(View v){
+
         if(inputEmail.getText().toString().equals("") && inputPass.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(),"Blank not allowed", Toast.LENGTH_LONG).show();
         }
         else {
+            proglog.setVisibility(View.VISIBLE);
             auth.signInWithEmailAndPassword(inputEmail.getText().toString(),inputPass.getText().toString())
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override

@@ -3,6 +3,7 @@ package com.example.nutz.dimdamlalwaniromero_midtermexam.Products;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,16 +31,16 @@ public class P1 extends AppCompatActivity {
 
         name = findViewById(R.id.name);
         price = findViewById(R.id.price);
-        qty = findViewById(R.id.qty);
-        add = findViewById(R.id.add);
+        //qty = findViewById(R.id.qty);
+        //add = findViewById(R.id.add);
 
-       /* DisplayMetrics dm = new DisplayMetrics();
+        DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.8),(int)(height*.6)); */
+        getWindow().setLayout((int)(width*.8),(int)(height*.6));
     }
 
     public void add(View v){

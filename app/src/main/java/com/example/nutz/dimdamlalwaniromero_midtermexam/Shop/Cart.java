@@ -8,8 +8,8 @@ import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 
 public class Cart extends AppCompatActivity {
 
-    TextView cart;
-    String finalCart;
+    TextView cart, cartTotal, saved, discount, total;
+    String finalCart, finalTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +17,13 @@ public class Cart extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         cart = findViewById(R.id.cart);
+        total = findViewById(R.id.total);
 
         finalCart = getIntent().getStringExtra("myCart");
+        finalTotal = getIntent().getStringExtra("myTotal");
 
         cart.setText(finalCart);
+        total.setText(finalTotal);
+
     }
 }
