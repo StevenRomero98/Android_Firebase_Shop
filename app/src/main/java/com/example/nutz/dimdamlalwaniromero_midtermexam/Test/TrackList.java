@@ -1,4 +1,4 @@
-package net.simplifiedcoding.firebasedatabaseexample;
+package com.example.nutz.dimdamlalwaniromero_midtermexam.Test;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class TrackList extends ArrayAdapter<Track> {
     List<Track> tracks;
 
     public TrackList(Activity context, List<Track> tracks) {
-        super(context, R.layout.layout_artist_list, tracks);
+        super(context, R.layout.test_layout_artist_list, tracks);
         this.context = context;
         this.tracks = tracks;
     }
@@ -27,7 +29,7 @@ public class TrackList extends ArrayAdapter<Track> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.layout_artist_list, null, true);
+        View listViewItem = inflater.inflate(R.layout.test_layout_artist_list, null, true);
 
         TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
         TextView textViewRating = (TextView) listViewItem.findViewById(R.id.textViewGenre);

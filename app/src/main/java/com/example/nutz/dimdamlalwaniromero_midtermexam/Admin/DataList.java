@@ -15,14 +15,14 @@ public class DataList {
     List<Data>dataList;
 
     public DataList(Activity context, List<Data> dataList) {
-        //super(context, R.layout.data_list, dataList);
+        //super(context, R.layout.test_layout_artist_list, dataList);
         this.context = context;
         this.dataList = dataList;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.data_list, null, true);
+        View listViewItem = inflater.inflate(R.layout.layout_data_list, null, true);
 
         TextView ViewName = listViewItem.findViewById(R.id.ViewName);
         TextView ViewDesc = listViewItem.findViewById(R.id.ViewDesc);
