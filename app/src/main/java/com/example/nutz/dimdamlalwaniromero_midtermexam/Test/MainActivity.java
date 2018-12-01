@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
     Button buttonAddArtist;
     ListView listViewArtists;
 
+    EditText addName, addDesc, addPrice, addQty;
+    Button add;
+
+    String name, desc, price, qty;
+
     //a list to store all the artist from firebase database
     List<Artist> artists;
 
@@ -48,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         databaseArtists = FirebaseDatabase.getInstance().getReference("artists");
 
         //getting views
+
+        addName = findViewById(R.id.addname);
+        addDesc = findViewById(R.id.adddesc);
+        addPrice = findViewById(R.id.addprice);
+        addQty = findViewById(R.id.addqty);
+
+        add = findViewById(R.id.add);
+
+
         editTextName = (EditText) findViewById(R.id.editTextName);
         spinnerGenre = (Spinner) findViewById(R.id.spinnerGenres);
         listViewArtists = (ListView) findViewById(R.id.listViewArtists);
@@ -65,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 //calling the method addArtist()
                 //the method is defined below
                 //this method is actually performing the write operation
-                addArtist();
+                //addArtist();
             }
         });
 
@@ -80,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ArtistActivity.class);
 
                 //putting artist name and id to intent
-                intent.putExtra(ARTIST_ID, artist.getArtistId());
-                intent.putExtra(ARTIST_NAME, artist.getArtistName());
+                intent.putExtra(ARTIST_ID, artist.getId());
+                intent.putExtra(ARTIST_NAME, artist.getName());
 
                 //starting the activity with intent
                 startActivity(intent);
@@ -92,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Artist artist = artists.get(i);
-                showUpdateDeleteDialog(artist.getArtistId(), artist.getArtistName());
+                showUpdateDeleteDialog(artist.getId(), artist.getName());
                 return true;
             }
         });
@@ -120,10 +134,12 @@ public class MainActivity extends AppCompatActivity {
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = editTextName.getText().toString().trim();
-                String genre = spinnerGenre.getSelectedItem().toString();
+                String name = addName.getText().toString().trim();
+                String desc = addDesc.getText().toString().trim();
+                String price = addPrice.getText().toString().trim();
+                String qty = addQty.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    updateArtist(artistId, name, genre);
+                    updateArtist(artistId, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
                     b.dismiss();
                 }
             }
@@ -140,12 +156,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private boolean updateArtist(String id, String name, String genre) {
+    private boolean updateArtist(String id, String name, String desc, double price, int qty) {
         //getting the specified artist reference
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("artists").child(id);
 
         //updating artist
-        Artist artist = new Artist(id, name, genre);
+        Artist artist = new Artist(id, name, desc, price, qty);
         dR.setValue(artist);
         Toast.makeText(getApplicationContext(), "Artist Updated", Toast.LENGTH_LONG).show();
         return true;
@@ -205,10 +221,12 @@ public class MainActivity extends AppCompatActivity {
     * This method is saving a new artist to the
     * Firebase Realtime Database
     * */
-    private void addArtist() {
+    public void addArtist(View v) {
         //getting the values to save
-        String name = editTextName.getText().toString().trim();
-        String genre = spinnerGenre.getSelectedItem().toString();
+        String name = addName.getText().toString().trim();
+        String desc = addDesc.getText().toString().trim();
+        String price = addPrice.getText().toString().trim();
+        String qty = addQty.getText().toString().trim();
 
         //checking if the value is provided
         if (!TextUtils.isEmpty(name)) {
@@ -218,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             String id = databaseArtists.push().getKey();
 
             //creating an Artist Object
-            Artist artist = new Artist(id, name, genre);
+            Artist artist = new Artist(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
 
             //Saving the Artist
             databaseArtists.child(id).setValue(artist);

@@ -35,8 +35,8 @@ public class ArtistList extends ArrayAdapter<Artist> {
         TextView textViewGenre = (TextView) listViewItem.findViewById(R.id.textViewGenre);
 
         Artist artist = artists.get(position);
-        textViewName.setText(artist.getArtistName());
-        textViewGenre.setText(artist.getArtistGenre());
+        textViewName.setText(artist.getName());
+        textViewGenre.setText(artist.getDesc());
 
         return listViewItem;
     }
