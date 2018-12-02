@@ -31,8 +31,8 @@ public class TrackList extends ArrayAdapter<Track> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.test_layout_artist_list, null, true);
 
-        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
-        TextView textViewRating = (TextView) listViewItem.findViewById(R.id.textViewGenre);
+        TextView textViewName = (TextView) listViewItem.findViewById(R.id.ViewName);
+        TextView textViewRating = (TextView) listViewItem.findViewById(R.id.ViewDesc);
 
         Track track = tracks.get(position);
         textViewName.setText(track.getTrackName());

@@ -34,7 +34,10 @@
         <activity android:name=".Products.P4" />
         <activity android:name=".Products.P5" />
         <activity android:name=".Products.P6" />
-        <activity android:name=".Admin.AddData"></activity>
+        <activity android:name=".Admin.AddData"/>
+
+        <activity android:name=".Test.MainActivity">
+        </activity>
     </application>
 
 </manifest>

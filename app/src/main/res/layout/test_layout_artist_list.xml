@@ -4,18 +4,32 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Atif Aslam"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:id="@+id/textViewName"
+        android:id="@+id/ViewName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
     <TextView
-        android:text="Rock"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:id="@+id/textViewGenre"
+        android:id="@+id/ViewDesc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Desc"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/ViewPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/ViewQty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Qty"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
 
 </LinearLayout>

@@ -31,12 +31,16 @@ public class ArtistList extends ArrayAdapter<Artist> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listViewItem = inflater.inflate(R.layout.test_layout_artist_list, null, true);
 
-        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
-        TextView textViewGenre = (TextView) listViewItem.findViewById(R.id.textViewGenre);
+        TextView ViewName = listViewItem.findViewById(R.id.ViewName);
+        TextView ViewDesc = listViewItem.findViewById(R.id.ViewDesc);
+        TextView ViewPrice = listViewItem.findViewById(R.id.ViewPrice);
+        TextView ViewQty = listViewItem.findViewById(R.id.ViewQty);
 
         Artist artist = artists.get(position);
-        textViewName.setText(artist.getName());
-        textViewGenre.setText(artist.getDesc());
+        ViewName.setText(artist.getName());
+        ViewDesc.setText(artist.getDesc());
+        ViewPrice.setText(String.valueOf(artist.getPrice()));
+        ViewQty.setText(String.valueOf(artist.getQty()));
 
         return listViewItem;
     }
