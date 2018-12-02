@@ -14,6 +14,7 @@ import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AddData;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.Shop;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.WelcomeScreen;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Test.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -55,6 +56,11 @@ public class Login extends AppCompatActivity {
 
     public void QuickSignIn(View v) {
         Intent i = new Intent(this, Shop.class);
+        startActivity(i);
+    }
+
+    public void Test(View v) {
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
 
