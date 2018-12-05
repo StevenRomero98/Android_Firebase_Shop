@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistActivity extends AppCompatActivity {
+public class ProductActivity extends AppCompatActivity {
 
     Button buttonAddTrack;
     EditText editTextTrackName;
@@ -97,7 +97,7 @@ public class ArtistActivity extends AppCompatActivity {
                     Track track = postSnapshot.getValue(Track.class);
                     tracks.add(track);
                 }
-                TrackList trackListAdapter = new TrackList(ArtistActivity.this, tracks);
+                TrackList trackListAdapter = new TrackList(ProductActivity.this, tracks);
                 listViewTracks.setAdapter(trackListAdapter);
             }
 

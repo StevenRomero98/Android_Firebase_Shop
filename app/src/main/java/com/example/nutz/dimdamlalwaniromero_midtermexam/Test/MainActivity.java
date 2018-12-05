@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     String name, desc, price, qty;
 
     //a list to store all the artist from firebase database
-    List<Artist> artists;
+    List<Product> products;
 
     //our database reference object
     DatabaseReference databaseArtists;
@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity_main);
 
-        //getting the reference of artists node
-        databaseArtists = FirebaseDatabase.getInstance().getReference("artists");
+        //getting the reference of products node
+        databaseArtists = FirebaseDatabase.getInstance().getReference("products");
 
         //getting views
 
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         buttonAddArtist = (Button) findViewById(R.id.buttonAddArtist);
 
-        //list to store artists
-        artists = new ArrayList<>();
+        //list to store products
+        products = new ArrayList<>();
 
 
         //adding an onclicklistener to button
@@ -87,15 +87,15 @@ public class MainActivity extends AppCompatActivity {
         listViewArtists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //getting the selected artist
-                Artist artist = artists.get(i);
+                //getting the selected product
+                Product product = products.get(i);
 
                 //creating an intent
-                Intent intent = new Intent(getApplicationContext(), ArtistActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
 
-                //putting artist name and id to intent
-                intent.putExtra(ARTIST_ID, artist.getId());
-                intent.putExtra(ARTIST_NAME, artist.getName());
+                //putting product name and id to intent
+                intent.putExtra(ARTIST_ID, product.getId());
+                intent.putExtra(ARTIST_NAME, product.getName());
 
                 //starting the activity with intent
                 startActivity(intent);
@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
         listViewArtists.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Artist artist = artists.get(i);
-                showUpdateDeleteDialog(artist.getId(), artist.getName());
+                Product product = products.get(i);
+                showUpdateDeleteDialog(product.getId(), product.getName());
                 return true;
             }
         });
@@ -157,19 +157,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean updateArtist(String id, String name, String desc, double price, int qty) {
-        //getting the specified artist reference
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("artists").child(id);
+        //getting the specified product reference
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("products").child(id);
 
-        //updating artist
-        Artist artist = new Artist(id, name, desc, price, qty);
-        dR.setValue(artist);
-        Toast.makeText(getApplicationContext(), "Artist Updated", Toast.LENGTH_LONG).show();
+        //updating product
+        Product product = new Product(id, name, desc, price, qty);
+        dR.setValue(product);
+        Toast.makeText(getApplicationContext(), "Product Updated", Toast.LENGTH_LONG).show();
         return true;
     }
 
     private boolean deleteArtist(String id) {
         //getting the specified artist reference
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("artists").child(id);
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("products").child(id);
 
         //removing artist
         dR.removeValue();
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
         //removing all tracks
         drTracks.removeValue();
-        Toast.makeText(getApplicationContext(), "Artist Deleted", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Product Deleted", Toast.LENGTH_LONG).show();
 
         return true;
     }
@@ -193,18 +193,18 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 //clearing the previous artist list
-                artists.clear();
+                products.clear();
 
                 //iterating through all the nodes
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //getting artist
-                    Artist artist = postSnapshot.getValue(Artist.class);
-                    //adding artist to the list
-                    artists.add(artist);
+                    //getting product
+                    Product product = postSnapshot.getValue(Product.class);
+                    //adding product to the list
+                    products.add(product);
                 }
 
                 //creating adapter
-                ArtistList artistAdapter = new ArtistList(MainActivity.this, artists);
+                ProductList artistAdapter = new ProductList(MainActivity.this, products);
                 //attaching adapter to the listview
                 listViewArtists.setAdapter(artistAdapter);
             }
@@ -232,20 +232,20 @@ public class MainActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(name)) {
 
             //getting a unique id using push().getKey() method
-            //it will create a unique id and we will use it as the Primary Key for our Artist
+            //it will create a unique id and we will use it as the Primary Key for our Product
             String id = databaseArtists.push().getKey();
 
-            //creating an Artist Object
-            Artist artist = new Artist(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
+            //creating an Product Object
+            Product product = new Product(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
 
-            //Saving the Artist
-            databaseArtists.child(id).setValue(artist);
+            //Saving the Product
+            databaseArtists.child(id).setValue(product);
 
             //setting edittext to blank again
             editTextName.setText("");
 
             //displaying a success toast
-            Toast.makeText(this, "Artist added", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Product added", Toast.LENGTH_LONG).show();
         } else {
             //if the value is not given displaying a toast
             Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show();

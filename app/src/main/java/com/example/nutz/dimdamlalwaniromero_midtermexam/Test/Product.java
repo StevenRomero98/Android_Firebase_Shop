@@ -6,17 +6,17 @@ import com.google.firebase.database.IgnoreExtraProperties;
  * Created by Belal on 2/26/2017.
  */
 @IgnoreExtraProperties
-public class Artist {
+public class Product {
 
     String id, name,desc;
     Double price;
     Integer qty;
 
-    public Artist(){
+    public Product(){
 
     }
 
-    public Artist(String id, String name, String desc, double price, int qty) {
+    public Product(String id, String name, String desc, double price, int qty) {
         this.id = id;
         this.name = name;
         this.desc = desc;

@@ -15,14 +15,14 @@ import java.util.List;
  * Created by Belal on 2/26/2017.
  */
 
-public class ArtistList extends ArrayAdapter<Artist> {
+public class ProductList extends ArrayAdapter<Product> {
     private Activity context;
-    List<Artist> artists;
+    List<Product> products;
 
-    public ArtistList(Activity context, List<Artist> artists) {
-        super(context, R.layout.test_layout_artist_list, artists);
+    public ProductList(Activity context, List<Product> products) {
+        super(context, R.layout.test_layout_artist_list, products);
         this.context = context;
-        this.artists = artists;
+        this.products = products;
     }
 
 
@@ -36,11 +36,11 @@ public class ArtistList extends ArrayAdapter<Artist> {
         TextView ViewPrice = listViewItem.findViewById(R.id.ViewPrice);
         TextView ViewQty = listViewItem.findViewById(R.id.ViewQty);
 
-        Artist artist = artists.get(position);
-        ViewName.setText(artist.getName());
-        ViewDesc.setText(artist.getDesc());
-        ViewPrice.setText(String.valueOf(artist.getPrice()));
-        ViewQty.setText(String.valueOf(artist.getQty()));
+        Product product = products.get(position);
+        ViewName.setText(product.getName());
+        ViewDesc.setText(product.getDesc());
+        ViewPrice.setText(String.valueOf(product.getPrice()));
+        ViewQty.setText(String.valueOf(product.getQty()));
 
         return listViewItem;
     }
