@@ -28,7 +28,7 @@ public class AddData extends AppCompatActivity {
 
     DatabaseReference db;
 
-    List<Data> dataList;
+    List<Product> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class AddData extends AppCompatActivity {
             String id = db.push().getKey();
 
             //creating an Artist Object
-            Data data = new Data(id, name,desc,Double.parseDouble(price),Integer.parseInt(qty));
+            Product data = new Product(id, name,desc,Double.parseDouble(price),Integer.parseInt(qty));
 
             //Saving the Artist
             db.child(id).setValue(data);
