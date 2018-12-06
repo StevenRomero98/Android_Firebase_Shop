@@ -1,6 +1,5 @@
-package com.example.nutz.dimdamlalwaniromero_midtermexam.Test;
+package com.example.nutz.dimdamlalwaniromero_midtermexam.Admin;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
@@ -24,33 +22,31 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    public static final String ARTIST_NAME = "net.simplifiedcoding.firebasedatabaseexample.artistname";
-    public static final String ARTIST_ID = "net.simplifiedcoding.firebasedatabaseexample.artistid";
+public class Admin extends AppCompatActivity {
+    public static final String PRODUCT_ID = "com.example.nutz.dimdamlalwaniromero_midtermexam.productid";
+    public static final String PRODUCT_NAME = "com.example.nutz.dimdamlalwaniromero_midtermexam.productname";
 
-    EditText editTextName;
-    Spinner spinnerGenre;
-    Button buttonAddArtist;
-    ListView listViewArtists;
+    EditText editTextName, editTextDesc, editTextPrice, editTextQty;
+    ListView listViewProducts;
 
     EditText addName, addDesc, addPrice, addQty;
     Button add;
 
     String name, desc, price, qty;
 
-    //a list to store all the artist from firebase database
+    //a list to store all the product from firebase database
     List<Product> products;
 
     //our database reference object
-    DatabaseReference databaseArtists;
+    DatabaseReference db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_activity_main);
+        setContentView(R.layout.admin);
 
         //getting the reference of products node
-        databaseArtists = FirebaseDatabase.getInstance().getReference("products");
+        db = FirebaseDatabase.getInstance().getReference("products");
 
         //getting views
 
@@ -62,71 +58,42 @@ public class MainActivity extends AppCompatActivity {
         add = findViewById(R.id.add);
 
 
-        editTextName = (EditText) findViewById(R.id.editTextName);
-        spinnerGenre = (Spinner) findViewById(R.id.spinnerGenres);
-        listViewArtists = (ListView) findViewById(R.id.listViewArtists);
+        editTextName = (EditText) findViewById(R.id.editName);
+        editTextDesc = (EditText) findViewById(R.id.editDesc);
+        editTextPrice = (EditText) findViewById(R.id.editPrice);
+        editTextQty = (EditText) findViewById(R.id.editQty);
 
-        buttonAddArtist = (Button) findViewById(R.id.buttonAddArtist);
+        listViewProducts = (ListView) findViewById(R.id.listViewProducts);
 
         //list to store products
         products = new ArrayList<>();
 
-
-        //adding an onclicklistener to button
-        buttonAddArtist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //calling the method addArtist()
-                //the method is defined below
-                //this method is actually performing the write operation
-                //addArtist();
-            }
-        });
-
         //attaching listener to listview
-        listViewArtists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //getting the selected product
-                Product product = products.get(i);
-
-                //creating an intent
-                Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
-
-                //putting product name and id to intent
-                intent.putExtra(ARTIST_ID, product.getId());
-                intent.putExtra(ARTIST_NAME, product.getName());
-
-                //starting the activity with intent
-                startActivity(intent);
-            }
-        });
-
-        listViewArtists.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Product product = products.get(i);
                 showUpdateDeleteDialog(product.getId(), product.getName());
-                return true;
+
             }
         });
-
-
     }
 
-    private void showUpdateDeleteDialog(final String artistId, String artistName) {
+    private void showUpdateDeleteDialog(final String productID, String productName) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.test_update_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.admin_update_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextName);
-        final Spinner spinnerGenre = (Spinner) dialogView.findViewById(R.id.spinnerGenres);
-        final Button buttonUpdate = (Button) dialogView.findViewById(R.id.buttonUpdateArtist);
-        final Button buttonDelete = (Button) dialogView.findViewById(R.id.buttonDeleteArtist);
+        final EditText editName = dialogView.findViewById(R.id.editPrice);
+        final EditText editDesc = dialogView.findViewById(R.id.editDesc);
+        final EditText editPrice = dialogView.findViewById(R.id.editPrice);
+        final EditText editQty = dialogView.findViewById(R.id.editQty);
+        final Button buttonUpdate = dialogView.findViewById(R.id.updateProduct);
+        final Button buttonDelete = dialogView.findViewById(R.id.deleteProduct);
 
-        dialogBuilder.setTitle(artistName);
+        dialogBuilder.setTitle(productName);
         final AlertDialog b = dialogBuilder.create();
         b.show();
 
@@ -134,12 +101,12 @@ public class MainActivity extends AppCompatActivity {
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = addName.getText().toString().trim();
-                String desc = addDesc.getText().toString().trim();
-                String price = addPrice.getText().toString().trim();
-                String qty = addQty.getText().toString().trim();
+                String name = editName.getText().toString().trim();
+                String desc = editDesc.getText().toString().trim();
+                String price = editPrice.getText().toString().trim();
+                String qty = editQty.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    updateArtist(artistId, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
+                    updateProduct(productID, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
                     b.dismiss();
                 }
             }
@@ -150,13 +117,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                deleteArtist(artistId);
+                deleteProduct(productID);
                 b.dismiss();
             }
         });
     }
 
-    private boolean updateArtist(String id, String name, String desc, double price, int qty) {
+    private boolean updateProduct(String id, String name, String desc, double price, int qty) {
         //getting the specified product reference
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("products").child(id);
 
@@ -167,14 +134,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean deleteArtist(String id) {
-        //getting the specified artist reference
+    private boolean deleteProduct(String id) {
+        //getting the specified product reference
         DatabaseReference dR = FirebaseDatabase.getInstance().getReference("products").child(id);
 
-        //removing artist
+        //removing product
         dR.removeValue();
 
-        //getting the tracks reference for the specified artist
+        //getting the tracks reference for the specified product
         DatabaseReference drTracks = FirebaseDatabase.getInstance().getReference("tracks").child(id);
 
         //removing all tracks
@@ -188,11 +155,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //attaching value event listener
-        databaseArtists.addValueEventListener(new ValueEventListener() {
+        db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //clearing the previous artist list
+                //clearing the previous product list
                 products.clear();
 
                 //iterating through all the nodes
@@ -204,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                ProductList artistAdapter = new ProductList(MainActivity.this, products);
+                AdminProductList productAdapter = new AdminProductList(Admin.this, products);
                 //attaching adapter to the listview
-                listViewArtists.setAdapter(artistAdapter);
+                listViewProducts.setAdapter(productAdapter);
             }
 
             @Override
@@ -218,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-    * This method is saving a new artist to the
+    * This method is saving a new product to the
     * Firebase Realtime Database
     * */
-    public void addArtist(View v) {
+    public void addProduct(View v) {
         //getting the values to save
         String name = addName.getText().toString().trim();
         String desc = addDesc.getText().toString().trim();
@@ -233,16 +200,16 @@ public class MainActivity extends AppCompatActivity {
 
             //getting a unique id using push().getKey() method
             //it will create a unique id and we will use it as the Primary Key for our Product
-            String id = databaseArtists.push().getKey();
+            String id = db.push().getKey();
 
             //creating an Product Object
             Product product = new Product(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
 
             //Saving the Product
-            databaseArtists.child(id).setValue(product);
+            db.child(id).setValue(product);
 
-            //setting edittext to blank again
-            editTextName.setText("");
+            //setting fields to blank again
+            addName.setText("");
 
             //displaying a success toast
             Toast.makeText(this, "Product added", Toast.LENGTH_LONG).show();
