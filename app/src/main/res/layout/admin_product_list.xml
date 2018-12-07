@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/ViewName"
-        android:layout_width="match_parent"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Name"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
     <TextView
         android:id="@+id/ViewDesc"
-        android:layout_width="match_parent"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Desc"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <TextView
         android:id="@+id/ViewPrice"
-        android:layout_width="match_parent"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Price"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <TextView
         android:id="@+id/ViewQty"
-        android:layout_width="match_parent"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="Qty"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
