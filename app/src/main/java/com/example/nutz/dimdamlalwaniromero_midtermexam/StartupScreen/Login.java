@@ -10,11 +10,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AddData;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.Shop;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.WelcomeScreen;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Test.MainActivity;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.Admin;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -60,7 +59,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void Test(View v) {
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, Admin.class);
         startActivity(i);
     }
 
