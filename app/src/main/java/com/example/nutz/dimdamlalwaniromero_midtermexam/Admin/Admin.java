@@ -73,25 +73,30 @@ public class Admin extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Product product = products.get(i);
-                showUpdateDeleteDialog(product.getId(), product.getName());
+                showUpdateDeleteDialog(product.getId(), product.getName(), product.getDesc(), String.valueOf(product.getPrice()), String.valueOf(product.getQty()));
 
             }
         });
     }
 
-    private void showUpdateDeleteDialog(final String productID, String productName) {
+    private void showUpdateDeleteDialog(final String productID, String productName, String productDesc, String productPrice, String productQty) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.admin_update_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        final EditText editName = dialogView.findViewById(R.id.editPrice);
+        final EditText editName = dialogView.findViewById(R.id.editName);
         final EditText editDesc = dialogView.findViewById(R.id.editDesc);
         final EditText editPrice = dialogView.findViewById(R.id.editPrice);
         final EditText editQty = dialogView.findViewById(R.id.editQty);
         final Button buttonUpdate = dialogView.findViewById(R.id.updateProduct);
         final Button buttonDelete = dialogView.findViewById(R.id.deleteProduct);
+
+        editName.setText(productName);
+        editDesc.setText(productDesc);
+        editPrice.setText(productPrice);
+        editQty.setText(productQty);
 
         dialogBuilder.setTitle(productName);
         final AlertDialog b = dialogBuilder.create();

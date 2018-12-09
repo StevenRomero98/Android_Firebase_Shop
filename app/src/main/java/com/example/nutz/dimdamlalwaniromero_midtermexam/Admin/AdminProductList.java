@@ -35,8 +35,8 @@ public class AdminProductList extends ArrayAdapter<Product> {
         Product product = products.get(position);
         ViewName.setText(product.getName());
         ViewDesc.setText(product.getDesc());
-        ViewPrice.setText(String.valueOf(product.getPrice()));
-        ViewQty.setText(String.valueOf(product.getQty()));
+        ViewPrice.setText("Price: $" + String.valueOf(product.getPrice()));
+        ViewQty.setText("Stocks: " + String.valueOf(product.getQty()));
 
         return listViewItem;
     }

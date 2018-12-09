@@ -5,9 +5,9 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Product {
 
-    String id, name,desc;
-    Double price;
-    Integer qty;
+    private String id, name,desc;
+    private Double price;
+    private Integer qty;
 
     public Product(){
 
