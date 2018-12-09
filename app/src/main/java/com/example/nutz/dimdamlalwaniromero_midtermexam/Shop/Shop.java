@@ -17,8 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.Admin;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AdminProductList;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.Product;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Cart.AddToCart;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Cart.Cart;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.StartupScreen.Signup;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +39,6 @@ public class Shop extends AppCompatActivity {
     public static final String PRODUCT_NAME = "com.example.nutz.dimdamlalwaniromero_midtermexam.productname";
 
     TextView p1, p2, p3, p4, p5, p6;
-    ImageButton pr1, pr2, pr3, pr4, pr5, pr6;
     EditText q1, q2, q3, q4, q5;
     CheckBox item1, item2, item3, item4, item5;
 
@@ -66,19 +66,18 @@ public class Shop extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference("products");
         listViewProducts = findViewById(R.id.listViewProducts);
 
-
         //attaching listener to listview
         listViewProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Product product = products.get(i);
-                showProduct(product.getId(), product.getName());
+                showProduct(product.getId(), product.getName(), product.getDesc(), String.valueOf(product.getPrice()), String.valueOf(product.getQty()));
 
             }
         });
     }
 
-    private void showProduct(final String productID, String productName) {
+    private void showProduct(final String id, String productName, String productDesc, String productPrice, String productQty) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -87,18 +86,56 @@ public class Shop extends AppCompatActivity {
 
 
         final TextView ViewName = dialogView.findViewById(R.id.ViewName);
-        ViewName.setText(productName);
+        final TextView ViewDesc = dialogView.findViewById(R.id.ViewDesc);
+        final TextView ViewPrice = dialogView.findViewById(R.id.ViewPrice);
+        final TextView ViewQty = dialogView.findViewById(R.id.ViewQty);
 
-        final EditText editName = dialogView.findViewById(R.id.editPrice);
-        final EditText editDesc = dialogView.findViewById(R.id.editDesc);
-        final EditText editPrice = dialogView.findViewById(R.id.editPrice);
-        final EditText editQty = dialogView.findViewById(R.id.editQty);
-        final Button buttonUpdate = dialogView.findViewById(R.id.updateProduct);
-        final Button buttonDelete = dialogView.findViewById(R.id.deleteProduct);
+        final EditText OrderQty = dialogView.findViewById(R.id.OrderQty);
+
+        ViewName.setText(productName);
+        ViewDesc.setText(productDesc);
+        ViewPrice.setText(productPrice);
+        ViewQty.setText(productQty);
+
+        final Button add = dialogView.findViewById(R.id.add);
 
         dialogBuilder.setTitle("Product Details");
         final AlertDialog b = dialogBuilder.create();
         b.show();
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = ViewName.getText().toString().trim();
+                String price = ViewPrice.getText().toString().trim();
+                String qty = OrderQty.getText().toString().trim();
+                final double itemprice = Double.parseDouble(price) * Double.parseDouble(qty);
+                if (!TextUtils.isEmpty(name)) {
+                    Toast.makeText(getApplicationContext(), "" + itemprice, Toast.LENGTH_SHORT).show();
+                    addToCart(id, name, Double.parseDouble(price), Integer.parseInt(qty), itemprice);
+                    b.dismiss();
+                }
+            }
+        });
+    }
+
+    private boolean addToCart(String id, String name, double price, int qty, double itemprice) {
+            //getting a unique id using push().getKey() method
+            //it will create a unique id and we will use it as the Primary Key for our Product
+            //String id = productID;
+            DatabaseReference cart = FirebaseDatabase.getInstance().getReference("mycart");
+
+            //creating an Product Object
+            AddToCart add = new AddToCart(id, name, price, qty, itemprice);
+
+            //Saving the Product
+            cart.child(id).setValue(add);
+
+            //displaying a success toast
+            Toast.makeText(this, "Added to Cart!", Toast.LENGTH_LONG).show();
+
+            return true;
+
     }
 
     @Override
@@ -133,6 +170,15 @@ public class Shop extends AppCompatActivity {
         });
     }
 
+    public void OpenCart(View v){
+        Intent i = new Intent(this, Cart.class);
+        startActivity(i);
+    }
+
+    public void Admin(View v){
+        Intent i = new Intent(getApplicationContext(), Admin.class);
+        startActivity(i);
+    }
 
     public void SignOut(View v){
         auth.signOut();
@@ -206,8 +252,4 @@ public class Shop extends AppCompatActivity {
         }
     }
 
-    public void Admin(View v){
-        Intent i = new Intent(getApplicationContext(), Admin.class);
-        startActivity(i);
-    }
 }

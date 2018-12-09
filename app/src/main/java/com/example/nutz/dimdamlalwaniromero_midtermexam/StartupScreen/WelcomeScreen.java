@@ -1,4 +1,4 @@
-package com.example.nutz.dimdamlalwaniromero_midtermexam.Shop;
+package com.example.nutz.dimdamlalwaniromero_midtermexam.StartupScreen;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.Shop;
 
 public class WelcomeScreen extends AppCompatActivity {
 

@@ -36,7 +36,7 @@ public class ShopProductList extends ArrayAdapter<Product> {
         Product product = products.get(position);
         ViewName.setText(product.getName());
         ViewDesc.setText(product.getDesc());
-        ViewPrice.setText(String.valueOf(product.getPrice()));
+        ViewPrice.setText("$" + String.valueOf(product.getPrice()));
         ViewQty.setText(String.valueOf(product.getQty()));
 
         return listViewItem;
