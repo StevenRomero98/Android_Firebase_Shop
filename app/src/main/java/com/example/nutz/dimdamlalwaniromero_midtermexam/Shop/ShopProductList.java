@@ -12,11 +12,11 @@ import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 
 import java.util.List;
 
-public class ProductList extends ArrayAdapter<Product> {
+public class ShopProductList extends ArrayAdapter<Product> {
     private Activity context;
     List<Product> products;
 
-    public ProductList(Activity context, List<Product> products) {
+    public ShopProductList(Activity context, List<Product> products) {
         super(context, R.layout.shop_product_list, products);
         this.context = context;
         this.products = products;

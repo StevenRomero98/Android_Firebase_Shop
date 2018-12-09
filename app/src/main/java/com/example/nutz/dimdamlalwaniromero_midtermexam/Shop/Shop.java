@@ -1,28 +1,41 @@
 package com.example.nutz.dimdamlalwaniromero_midtermexam.Shop;
 
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AddData;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.Admin;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.AdminProductList;
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.Product;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.StartupScreen.Signup;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P1;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P2;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P3;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P4;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P5;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Products.P6;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Shop extends AppCompatActivity {
+
+    public static final String PRODUCT_ID = "com.example.nutz.dimdamlalwaniromero_midtermexam.productid";
+    public static final String PRODUCT_NAME = "com.example.nutz.dimdamlalwaniromero_midtermexam.productname";
 
     TextView p1, p2, p3, p4, p5, p6;
     ImageButton pr1, pr2, pr3, pr4, pr5, pr6;
@@ -35,36 +48,91 @@ public class Shop extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
 
+    ListView listViewProducts;
+    //a list to store all the product from firebase database
+    List<Product> products;
+
+    //our database reference object
+    DatabaseReference db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop);
+        setContentView(R.layout.shop);
 
-        p1 = findViewById(R.id.p1);
-        p2 = findViewById(R.id.p2);
-        p3 = findViewById(R.id.p3);
-        p4 = findViewById(R.id.p4);
-        p5 = findViewById(R.id.p5);
+        //list to store products
+        products = new ArrayList<>();
+        //getting the reference of products node
+        db = FirebaseDatabase.getInstance().getReference("products");
+        listViewProducts = findViewById(R.id.listViewProducts);
 
-        pr1 = findViewById(R.id.pr1);
-        pr2 = findViewById(R.id.pr2);
-        pr3 = findViewById(R.id.pr3);
-        pr4 = findViewById(R.id.pr4);
-        pr5 = findViewById(R.id.pr5);
 
-        item1 = findViewById(R.id.item1);
-        item2 = findViewById(R.id.item2);
-        item3 = findViewById(R.id.item3);
-        item4 = findViewById(R.id.item4);
-        item5 = findViewById(R.id.item5);
+        //attaching listener to listview
+        listViewProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Product product = products.get(i);
+                showProduct(product.getId(), product.getName());
 
-        q1 = findViewById(R.id.q1);
-        q2 = findViewById(R.id.q2);
-        q3 = findViewById(R.id.q3);
-        q4 = findViewById(R.id.q4);
-        q5 = findViewById(R.id.q5);
-
+            }
+        });
     }
+
+    private void showProduct(final String productID, String productName) {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.shop_product_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+
+        final TextView ViewName = dialogView.findViewById(R.id.ViewName);
+        ViewName.setText(productName);
+
+        final EditText editName = dialogView.findViewById(R.id.editPrice);
+        final EditText editDesc = dialogView.findViewById(R.id.editDesc);
+        final EditText editPrice = dialogView.findViewById(R.id.editPrice);
+        final EditText editQty = dialogView.findViewById(R.id.editQty);
+        final Button buttonUpdate = dialogView.findViewById(R.id.updateProduct);
+        final Button buttonDelete = dialogView.findViewById(R.id.deleteProduct);
+
+        dialogBuilder.setTitle("Product Details");
+        final AlertDialog b = dialogBuilder.create();
+        b.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //attaching value event listener
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //clearing the previous product list
+                products.clear();
+
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting product
+                    Product product = postSnapshot.getValue(Product.class);
+                    //adding product to the list
+                    products.add(product);
+                }
+
+                //creating adapter
+                ShopProductList productAdapter = new ShopProductList(Shop.this, products);
+                //attaching adapter to the listview
+                listViewProducts.setAdapter(productAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     public void SignOut(View v){
         auth.signOut();
@@ -138,39 +206,8 @@ public class Shop extends AppCompatActivity {
         }
     }
 
-
-   public void OpenP1(View v){
-        Intent i = new Intent(getApplicationContext(), P1.class);
-        startActivity(i);
-    }
-
-    public void OpenP2(View v){
-        Intent i = new Intent(getApplicationContext(), P2.class);
-        startActivity(i);
-    }
-
-    public void OpenP3(View v){
-        Intent i = new Intent(getApplicationContext(), P3.class);
-        startActivity(i);
-    }
-
-    public void OpenP4(View v){
-        Intent i = new Intent(getApplicationContext(), P4.class);
-        startActivity(i);
-    }
-
-    public void OpenP5(View v){
-        Intent i = new Intent(getApplicationContext(), P5.class);
-        startActivity(i);
-    }
-
-    public void OpenP6(View v){
-        Intent i = new Intent(getApplicationContext(), P6.class);
-        startActivity(i);
-    }
-
     public void Admin(View v){
-        Intent i = new Intent(getApplicationContext(), AddData.class);
+        Intent i = new Intent(getApplicationContext(), Admin.class);
         startActivity(i);
     }
 }
