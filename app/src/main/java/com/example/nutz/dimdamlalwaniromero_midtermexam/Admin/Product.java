@@ -16,7 +16,7 @@ public class Product {
 
     }
 
-    public Product(String id, String name, String desc, double price, int qty) {
+    public Product(String id, String name, String desc, double price, int qty, String imgName, String imgUrl) {
 
         if (name.trim().equals("")) {
             name = "No Name";
@@ -28,8 +28,8 @@ public class Product {
         this.price = price;
         this.qty = qty;
 
-        //this.imgName = imgName;
-        //this.imgUrl = imgUrl;
+        this.imgName = imgName;
+        this.imgUrl = imgUrl;
     }
 
     public String getId() {
@@ -52,8 +52,16 @@ public class Product {
         return qty;
     }
 
-    //public String getImgName() { return imgName; }
+    public String getImgName() { return imgName; }
 
-    //public String getImgUrl() { return imgUrl; }
+    public String getImgUrl() { return imgUrl; }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 
 }

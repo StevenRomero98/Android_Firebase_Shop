@@ -111,7 +111,6 @@ public class Admin extends AppCompatActivity {
                 if (imgUpload != null && imgUpload.isInProgress()) {
                     Toast.makeText(Admin.this, "Upload in progress", Toast.LENGTH_SHORT).show();
                 } else {
-                    uploadFile();
                     addProduct();
                 }
             }
@@ -122,13 +121,13 @@ public class Admin extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Product product = products.get(i);
-                showUpdateDeleteDialog(product.getId(), product.getName(), product.getDesc(), String.valueOf(product.getPrice()), String.valueOf(product.getQty()));
+                showUpdateDeleteDialog(product.getId(), product.getName(), product.getDesc(), String.valueOf(product.getPrice()), String.valueOf(product.getQty()), product.getImgName(), product.getImgUrl());
 
             }
         });
     }
 
-    private void showUpdateDeleteDialog(final String productID, String productName, String productDesc, String productPrice, String productQty) {
+    private void showUpdateDeleteDialog(final String productID, String productName, String productDesc, String productPrice, String productQty, String imgName, String imgUrl) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -139,6 +138,9 @@ public class Admin extends AppCompatActivity {
         final EditText editDesc = dialogView.findViewById(R.id.editDesc);
         final EditText editPrice = dialogView.findViewById(R.id.editPrice);
         final EditText editQty = dialogView.findViewById(R.id.editQty);
+        final EditText editImageName = dialogView.findViewById(R.id.editImageName);
+        final EditText editImage = dialogView.findViewById(R.id.editImage);
+        final ProgressBar progressBar = dialogView.findViewById(R.id.progressBar);
         final Button buttonUpdate = dialogView.findViewById(R.id.updateProduct);
         final Button buttonDelete = dialogView.findViewById(R.id.deleteProduct);
 
@@ -155,6 +157,7 @@ public class Admin extends AppCompatActivity {
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String name = editName.getText().toString().trim();
                 String desc = editDesc.getText().toString().trim();
                 String price = editPrice.getText().toString().trim();
@@ -179,11 +182,11 @@ public class Admin extends AppCompatActivity {
 
     private boolean updateProduct(String id, String name, String desc, double price, int qty) {
         //getting the specified product reference
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("products").child(id);
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("products").child(id);
 
         //updating product
-        Product product = new Product(id, name, desc, price, qty);
-        dR.setValue(product);
+        //Product product = new Product(id, name, desc, price, qty);
+        //db.setValue(product);
         Toast.makeText(getApplicationContext(), "Product Updated", Toast.LENGTH_LONG).show();
         return true;
     }
@@ -244,31 +247,73 @@ public class Admin extends AppCompatActivity {
     * */
     public void addProduct() {
         //getting the values to save
-        String name = addName.getText().toString().trim();
-        String desc = addDesc.getText().toString().trim();
-        String price = addPrice.getText().toString().trim();
-        String qty = addQty.getText().toString().trim();
+        final String name = addName.getText().toString().trim();
+        final String desc = addDesc.getText().toString().trim();
+        final String price = addPrice.getText().toString().trim();
+        final String qty = addQty.getText().toString().trim();
+        final String imgName = addImage.getText().toString().trim();
+
 
         //checking if the value is provided
-        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(price) && !TextUtils.isEmpty(qty)) {
+        if (uri != null && !TextUtils.isEmpty(name) && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(price) && !TextUtils.isEmpty(qty)) {
+
+            StorageReference fileReference = img.child(System.currentTimeMillis()
+                    + "." + getFileExtension(uri));
+
+            imgUpload = fileReference.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setProgress(0);
+                                }
+                            }, 500);
+
+                            Toast.makeText(Admin.this, "Upload successful", Toast.LENGTH_LONG).show();
+
+                            String id = db.push().getKey();
+                            Product product = new Product(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty), imgName, taskSnapshot.getUploadSessionUri().toString());
+                            //String uploadId = db.push().getKey();
+
+                            db.child(id).setValue(product);
+                            //db.child(uploadId).setValue(product);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Admin.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressBar.setProgress((int) progress);
+                        }
+                    });
 
             //getting a unique id using push().getKey() method
             //it will create a unique id and we will use it as the Primary Key for our Product
             String id = db.push().getKey();
 
             //creating an Product Object
-            Product product = new Product(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
+            //Product product = new Product(id, name, desc, Double.parseDouble(price), Integer.parseInt(qty));
 
             //Saving the Product
-            db.child(id).setValue(product);
+            //db.child(id).setValue(product);
 
             //setting fields to blank again
             addName.setText("");
+            addDesc.setText("");
+            addPrice.setText("");
+            addQty.setText("");
 
             //displaying a success toast
             Toast.makeText(this, "Product added", Toast.LENGTH_LONG).show();
-
-            uploadFile();
         } else {
             //if the value is not given displaying a toast
             Toast.makeText(this, "Please fill out empty fields", Toast.LENGTH_LONG).show();
@@ -299,7 +344,7 @@ public class Admin extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
-
+/*
     private void uploadFile() {
         if (uri != null) {
             StorageReference fileReference = img.child(System.currentTimeMillis()
@@ -340,5 +385,5 @@ public class Admin extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }
-    }
+    } */
 }
