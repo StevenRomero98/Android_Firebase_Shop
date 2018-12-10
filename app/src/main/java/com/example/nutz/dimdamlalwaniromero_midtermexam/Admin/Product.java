@@ -9,16 +9,27 @@ public class Product {
     private Double price;
     private Integer qty;
 
+    private String imgName;
+    private String imgUrl;
+
     public Product(){
 
     }
 
     public Product(String id, String name, String desc, double price, int qty) {
+
+        if (name.trim().equals("")) {
+            name = "No Name";
+        }
+
         this.id = id;
         this.name = name;
         this.desc = desc;
         this.price = price;
         this.qty = qty;
+
+        //this.imgName = imgName;
+        //this.imgUrl = imgUrl;
     }
 
     public String getId() {
@@ -40,4 +51,9 @@ public class Product {
     public int getQty() {
         return qty;
     }
+
+    //public String getImgName() { return imgName; }
+
+    //public String getImgUrl() { return imgUrl; }
+
 }

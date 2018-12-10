@@ -1,23 +1,39 @@
 package com.example.nutz.dimdamlalwaniromero_midtermexam.Admin;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +41,29 @@ import java.util.List;
 public class Admin extends AppCompatActivity {
     public static final String PRODUCT_ID = "com.example.nutz.dimdamlalwaniromero_midtermexam.productid";
     public static final String PRODUCT_NAME = "com.example.nutz.dimdamlalwaniromero_midtermexam.productname";
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     EditText editTextName, editTextDesc, editTextPrice, editTextQty;
     ListView listViewProducts;
 
-    EditText addName, addDesc, addPrice, addQty;
-    Button add;
+    EditText addName, addDesc, addPrice, addQty, addImage;
+    Button chooseImage, add;
+    ImageView testImage;
+    ProgressBar progressBar;
+
+    Uri uri;
 
     String name, desc, price, qty;
 
     //a list to store all the product from firebase database
     List<Product> products;
 
-    //our database reference object
+
+    //our database & storage reference object
     DatabaseReference db;
+    StorageReference img;
+
+    StorageTask imgUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +72,7 @@ public class Admin extends AppCompatActivity {
 
         //getting the reference of products node
         db = FirebaseDatabase.getInstance().getReference("products");
+        img = FirebaseStorage.getInstance().getReference("imgs");
 
         //getting views
 
@@ -54,7 +80,11 @@ public class Admin extends AppCompatActivity {
         addDesc = findViewById(R.id.adddesc);
         addPrice = findViewById(R.id.addprice);
         addQty = findViewById(R.id.addqty);
+        addImage = findViewById(R.id.addImage);
+        testImage = findViewById(R.id.testImage);
+        progressBar = findViewById(R.id.progressBar);
 
+        chooseImage = findViewById(R.id.chooseImage);
         add = findViewById(R.id.add);
 
 
@@ -67,6 +97,25 @@ public class Admin extends AppCompatActivity {
 
         //list to store products
         products = new ArrayList<>();
+
+        chooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imgUpload != null && imgUpload.isInProgress()) {
+                    Toast.makeText(Admin.this, "Upload in progress", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadFile();
+                    addProduct();
+                }
+            }
+        });
 
         //attaching listener to listview
         listViewProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -193,7 +242,7 @@ public class Admin extends AppCompatActivity {
     * This method is saving a new product to the
     * Firebase Realtime Database
     * */
-    public void addProduct(View v) {
+    public void addProduct() {
         //getting the values to save
         String name = addName.getText().toString().trim();
         String desc = addDesc.getText().toString().trim();
@@ -201,7 +250,7 @@ public class Admin extends AppCompatActivity {
         String qty = addQty.getText().toString().trim();
 
         //checking if the value is provided
-        if (!TextUtils.isEmpty(name)) {
+        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(desc) && !TextUtils.isEmpty(price) && !TextUtils.isEmpty(qty)) {
 
             //getting a unique id using push().getKey() method
             //it will create a unique id and we will use it as the Primary Key for our Product
@@ -218,9 +267,78 @@ public class Admin extends AppCompatActivity {
 
             //displaying a success toast
             Toast.makeText(this, "Product added", Toast.LENGTH_LONG).show();
+
+            uploadFile();
         } else {
             //if the value is not given displaying a toast
-            Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please fill out empty fields", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            uri = data.getData();
+
+            Picasso.get().load(uri).into(testImage);
+        }
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile() {
+        if (uri != null) {
+            StorageReference fileReference = img.child(System.currentTimeMillis()
+                    + "." + getFileExtension(uri));
+
+            imgUpload = fileReference.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setProgress(0);
+                                }
+                            }, 500);
+
+                            Toast.makeText(Admin.this, "Upload successful", Toast.LENGTH_LONG).show();
+                            Upload upload = new Upload(addImage.getText().toString().trim(),
+                                    taskSnapshot.getUploadSessionUri().toString());
+                            String uploadId = db.push().getKey();
+                            db.child(uploadId).setValue(upload);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Admin.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressBar.setProgress((int) progress);
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
 }
