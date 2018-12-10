@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -179,7 +180,15 @@ public class Cart extends AppCompatActivity {
 
     public void Checkout (View v) {
         FirebaseDatabase.getInstance().getReference("mycart").removeValue();
-        TotalPrice.setText(0);
+        //TotalPrice.setText(0);
+        try {
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage("09055694669", null, "test", null, null);
+            Toast.makeText(Cart.this, "SMS Sent Successfully", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(Cart.this, "SMS Failed to Send", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
 }

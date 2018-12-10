@@ -10,9 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.nutz.dimdamlalwaniromero_midtermexam.Cart.Cart;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.R;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.Shop;
-import com.example.nutz.dimdamlalwaniromero_midtermexam.Shop.WelcomeScreen;
 import com.example.nutz.dimdamlalwaniromero_midtermexam.Admin.Admin;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,6 +60,11 @@ public class Login extends AppCompatActivity {
 
     public void Test(View v) {
         Intent i = new Intent(this, Admin.class);
+        startActivity(i);
+    }
+
+    public void Test2(View v) {
+        Intent i = new Intent(this, Cart.class);
         startActivity(i);
     }
 

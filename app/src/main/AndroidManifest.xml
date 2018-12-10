@@ -3,6 +3,7 @@
     package="com.example.nutz.dimdamlalwaniromero_midtermexam">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -26,18 +27,11 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Shop.WelcomeScreen" />
-        <activity android:name=".Shop.Cart" />
-        <activity android:name=".Products.P1" />
-        <activity android:name=".Products.P2" />
-        <activity android:name=".Products.P3" />
-        <activity android:name=".Products.P4" />
-        <activity android:name=".Products.P5" />
-        <activity android:name=".Products.P6" />
-        <activity android:name=".Admin.AddData"/>
-
-        <activity android:name=".Test.MainActivity">
-        </activity>
+        <activity android:name=".StartupScreen.WelcomeScreen" />
+        <activity android:name=".Admin.Admin" />
+        <activity
+            android:name=".Cart.Cart"
+            android:label="@string/title_activity_cart"></activity>
     </application>
 
 </manifest>
